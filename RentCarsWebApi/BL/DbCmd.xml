@@ -63,7 +63,7 @@
     <![CDATA[
 begin
   if NOT EXISTS ( SELECT * FROM [User] u
-                   WHERE [Idd] = @id
+                   WHERE [I] = @id
                    or u.Username = @username)     
       INSERT INTO [User] ([Id]
       ,[FullName] 
