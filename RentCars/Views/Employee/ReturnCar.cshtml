@@ -1,0 +1,24 @@
+﻿@model RentCars.BL.RecordResponse<List<CarsInventory>>
+@{
+    ViewBag.Title = "ReturnCar";
+}
+
+<h2>ReturnCar</h2>
+<form action="http://localhost:52042/Employee/Return">
+    <input type="text" name="carNum_s" placeholder="Insert car number" /><br />
+    <input id="returnCarBtn" type="submit" class="btn btn-primary" />
+
+</form>
+
+@if (ViewBag.returnResponse != null)
+{ <div class="form-group">
+        @if (ViewBag.returnResponse.Message.Contains("cost"))
+        {
+            <label>Total Rent cost:</label> @ViewBag.returnResponse.Message
+        }
+        else
+        {
+            <label>ERROR:</label> @ViewBag.returnResponse.Message
+        }
+    </div>
+}

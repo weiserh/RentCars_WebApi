@@ -1,0 +1,91 @@
+﻿@model RentCars.BL.RecordResponse<List<Order>>
+@{
+    ViewBag.Title = "Orders";
+}
+
+<h2>Orders</h2>
+
+<div class="managerMsg">@Model.Message</div>
+<table class="table table-hover table-bordered table-condensed ">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Start Date</th>
+            <th>Return Date</th>
+            <th>Actual Return Date</th>
+            <th>Client ID</th>
+            <th>Car Number</th>
+            <th>Is Active</th>
+
+            <td></td>
+        </tr>
+    </thead>
+
+    @foreach (var order in Model.t)
+            {
+        <tr>
+            <td>@order.Id</td>
+            <td>@order.StartDate.ToString("d")</td>
+            <td>@order.ReturnDate.ToString("d")</td>
+            <td>@order.ActualReturnDate.ToString("d")</td>
+            <td>@order.TZ</td>
+            <td>@order.CarNumber</td>
+            <td>@order.IsActive</td>
+            <td>
+                <button name="edit" class="btn btn-primary btn-edit" onclick="openEditOrderWindow(@order.Id, '@order.StartDate.ToString("yyyy-MM-dd")', '@order.ReturnDate.ToString("yyyy-MM-dd")', '@order.ActualReturnDate.ToString("yyyy-MM-dd")', '@order.TZ', '@order.CarNumber','@order.IsActive')">Edit</button>
+                <button name="delete" class="btn btn-danger" onclick="deleteOrder(@order.Id)">Delete</button>
+            </td>
+        </tr>
+    }
+</table>
+
+
+<button id="modalBtn" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="display:none;">
+    Launch demo modal
+</button>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit Order</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="editOrderId" class="control-label">Order:</label>
+                    <input type="number" class="form-control" id="editOrderId" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="editStartDate" class="control-label">Start Date:</label>
+                    <input type="date" class="form-control" id="editStartDate">
+                </div>
+                <div class="form-group">
+                    <label for="editReturnDate" class="control-label">Return Date:</label>
+                    <input type="date" class="form-control" id="editReturnDate">
+                </div>
+                <div class="form-group">
+                    <label for="editActualReturnDate" class="control-label">Actual Return Date:</label>
+                    <input type="date" class="form-control" id="editActualReturnDate">
+                </div>
+                <div class="form-group">
+                    <label for="editUserId" class="control-label">Client ID:</label>
+                    <input type="number" class="form-control" id="editUserId">
+                </div>
+                <div class="form-group">
+                    <label for="editCarNumber" class="control-label">Car Number:</label>
+                    <input type="number" class="form-control" id="editCarNumber">
+                </div>
+                <div class="form-group">
+                    <label for="editIsActive" class="control-label">Active:</label>
+                    <input type="radio" class="form-control" id="editIsActive" name="isActive">Yes
+                    <input type="radio" class="form-control" id="editIsActive" name="isActive">No
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="editOrder()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "recentSearch";
+}
+    
+<body>
+    <h2>recent search Car</h2>
+    <div id="result"></div>
+    <script>
+// Check browser support
+
+
+    // Retrieve
+    document.getElementById("result").innerHTML = localStorage.getItem("car");
+
+    </script>
+
+</body>
+
+

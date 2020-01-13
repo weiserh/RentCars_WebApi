@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqls>
+  <search_cars>
+<![CDATA[
+   SELECT distinct p.[Id]
+                  ,[Manufacturer]
+                  ,[Model]
+                  ,[Price]
+                  ,[DelayPrice]
+                  ,[Year]
+                  ,[Gear]
+                  ,g.[Group]
+                  ,[Image]
+    FROM [RentCars].[dbo].[Car] c join PriceList p on c.PriceListId = p.Id
+    join CarGroup g on g.Id = p.CarGroupId
+    where IsValid = 1 and IsAvailable = 1
+]]>
+  </search_cars>
+  <get_orders>
+    <![CDATA[
+    select StartDate,
+           ReturnDate,
+           ActualReturnDate,
+           UserId,
+           CarId,
+           IsActive,
+           Id
+    from dbo.[Order]
+    where userid = @userid
+    ]]>
+  </get_orders>
+  <add_order>
+    <![CDATA[ 
+  insert into [Order]
+  ([CarId],[StartDate], [ReturnDate], [UserId],  [IsActive])
+  select top 1 [Id],@startDate,@returnDate,@userId,@isActive
+  FROM [RentCars].[dbo].[Car]
+  where [IsValid] = 1 and [IsAvailable] = 1
+  and [PriceListId] = @priceListId
+  order by [Mileage]
+  select MAX(id) as orderId from [Order]
+]]>
+  </add_order>
+  <delete_order>
+    <![CDATA[
+  delete from [Order]
+  where id = @orderId
+    ]]>
+  </delete_order>
+  <update_order>
+    <![CDATA[ 
+  update [Order]
+  set 
+  StartDate = @startDate,
+  ReturnDate = @returnDate,
+  UserId = @userId,
+  CarId = @carId,
+  IsActive = @isActive
+  where Id = @id
+]]>
+  </update_order>
+  <add_user>
+    <![CDATA[
+begin
+  if NOT EXISTS ( SELECT * FROM [User] u
+                   WHERE [Id] = 3433333333
+                   or u.Username = @username)     
+      INSERT INTO [User] ([Id]
+      ,[FullName] 
+      ,[Username]
+      ,[Dob]
+      ,[Email]
+      ,[Password]
+      ,[Image])
+      VALUES (@id,	@fullName,	@username,	@dob,	@email, @password,	NULL) 
+  select ROWCOUNT@@ as rows_effected
+end
+    ]]>
+  </add_user>
+  <check_username_password>
+    <![CDATA[
+select
+case 
+when exists (SELECT *
+  FROM User
+  where [Username] = @username
+ and [Password] = @password) 
+ then 1
+  else 0 
+end as match
+    ]]>
+  </check_username_password>
+</sqls>

@@ -1,0 +1,89 @@
+﻿@model RentCars.BL.RecordResponse<List<Worker>>
+
+@{
+    ViewBag.Title = "Workers";
+}
+
+<h2>Workers List</h2>
+
+<div class="managerMsg">@Model.Message</div>
+<form action="http://localhost:52042/Admin/AddWorker">
+    <table class="table table-hover table-bordered table-condensed ">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Role</th>
+                <td></td>
+            </tr>
+        </thead>
+        <tr>
+            <td><input type="text" class="form-control textInput" name="name" placeholder="Worker name" required /></td>
+            <td><input type="text" class="form-control textInput" name="username" placeholder="Username" required/></td>
+            <td><input type="text" class="form-control textInput" name="password" placeholder="Password" required/></td>
+            <td>
+                <input type="radio" name="role" value="Employee" checked />Employee<br />
+                <input type="radio" name="role" value="Manager" />Manager
+            </td>
+            <td><button type="submit" class="btn btn-primary btn-edit" >Add</button></td>
+
+        </tr>
+
+        @foreach (var worker in Model.t)
+            {
+            <tr>
+                <td style="display:none;">@worker.WorkerId </td>
+                <td>@worker.Name</td>
+                <td>@worker.Username</td>
+                <td>@worker.Password</td>
+                <td>@worker.Role</td>
+                <td>
+                    <button" name="edit" class="btn btn-primary btn-edit" onclick="openEditWorkerWindow(@worker.WorkerId, '@worker.Name', '@worker.Username', '@worker.Password', '@worker.Role')">Edit</button">
+                    <button" name="delete" class="btn btn-danger" onclick="deleteWorker(@worker.WorkerId)">Delete</button">
+                </td>
+            </tr>
+        }
+    </table>
+</form>
+<button id="modalBtn" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="display:none;">
+    Launch demo modal
+</button>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit Worker</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="workerId" class="control-label">Worker:</label>
+                    <input type="number" class="form-control" id="workerId" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="workerName" class="control-label">Name:</label>
+                    <input type="text" class="form-control" id="workerName">
+                </div>
+                <div class="form-group">
+                    <label for="username" class="control-label">Username:</label>
+                    <input type="text" class="form-control" id="username">
+                </div>
+                <div class="form-group">
+                    <label for="password" class="control-label">Password:</label>
+                    <input type="text" class="form-control" id="password">
+                </div>
+                <div class="form-group">
+                    <label for="role" class="control-label">Role:</label>
+                    <input type="radio"  id="role" name="role" value="Employee">Employee<br>
+                    <input type="radio"  id="role" name="role" value="Manager">Manager
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="editWorker()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

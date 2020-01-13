@@ -1,0 +1,133 @@
+﻿@model RentCars.BL.RecordResponse<List<CarPriceList>>
+
+@{
+    ViewBag.Title = "CarPriceLists";
+}
+
+<h2>Price Lists</h2>
+
+
+<div class="managerMsg">@Model.Message</div>
+<form action="http://localhost:52042/Admin/AddCarPriceList">
+    <table class="table table-hover table-bordered table-condensed ">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Manufacturer</th>
+                <th>Model</th>
+                <th>Price</th>
+                <th>Delay Price</th>
+                <th>Year</th>
+                <th>Gear</th>
+                <th>Car Group</th>
+                <th>Image</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tr>
+            <td></td>
+            <td><input type="text" class="form-control textInput" name="manufacturer" placeholder="Manufacturer" required /></td>
+            <td><input type="text" class="form-control textInput" name="model" placeholder="Model" required onfocus="copyToImage" /></td>
+            <td><input type="number" class="form-control textInput" name="price" placeholder="Price" required /></td>
+            <td><input type="number"class="form-control textInput" name="delayPrice" placeholder="Delay price" required /></td>
+            <td><input type="number" class="form-control textInput" name="year" placeholder="Year" required /></td>
+            <td style="text-align:left;"> 
+                <span style="white-space:nowrap;">
+                    <input id="gear_auto" type="radio" name="gear_s" value="Automatic" checked />
+                    <label for="gear_auto">Automatic</label>
+                </span><br />
+                <span style="white-space:nowrap;">
+                    <input type="radio" name="gear_s" value="Manual" id="gear_man" />
+                    <label for="gear_man">Manual</label>
+                </span>
+            </td>
+            <td><input type="text" class="form-control" name="carGroup" placeholder="Car-group" required /></td>
+            <td>
+                <input type="text"  class="form-control" name="model" placeholder="Image name" />
+                <input type="file" name="pic" accept="image/*">
+            </td>
+
+
+            <td><button type="submit" class="btn btn-primary btn-edit" >Add</button></td>
+
+        </tr>
+
+        @foreach (var priceList in Model.t)
+            {
+            <tr>
+                <td>@priceList.CarPriceListId</td>
+                <td>@priceList.Manufacturer</td>
+                <td>@priceList.Model</td>
+                <td>@priceList.Price</td>
+                <td>@priceList.DelayPrice</td>
+                <td>@priceList.Year</td>
+                <td>@priceList.Gear</td>
+                <td>@priceList.CarGroup</td>
+                <td><@String.Format("img src=/Images/models/{0}.jpg alt={0} class=smallImg", priceList.Model)></td>
+
+                <td>
+                    <button class="btn btn-primary btn-edit" name="edit" onclick="openEditPriceListWindow(@priceList.CarPriceListId, '@priceList.Manufacturer', '@priceList.Model', @priceList.Price, @priceList.DelayPrice,@priceList.Year,'@priceList.Gear','@priceList.CarGroup','@priceList.Image')" >Edit</button>
+                    <button class="btn btn-danger" name="delete" onclick="deletePriceList(@priceList.CarPriceListId)" >Delete</button>
+                </td>
+            </tr>
+        }
+    </table>
+</form>
+<button id="modalBtn" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="display:none;">
+    Launch demo modal
+</button>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit Price-List</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="carPriceListId" class="control-label">Price-List Id:</label>
+                    <input type="number" class="form-control" id="carPriceListId" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="manufacturer" class="control-label">Manufacturer:</label>
+                    <input type="text" class="form-control" id="manufacturer">
+                </div>
+                <div class="form-group">
+                    <label for="model" class="control-label">Model:</label>
+                    <input type="text" class="form-control" id="model">
+                </div>
+                <div class="form-group">
+                    <label for="price" class="control-label">Price:</label>
+                    <input type="number" class="form-control" id="price">
+                </div>
+                <div class="form-group">
+                    <label for="delayPrice" class="control-label">Delay Price:</label>
+                    <input type="number" class="form-control" id="delayPrice">
+                </div>
+                <div class="form-group">
+                    <label for="year" class="control-label">Year:</label>
+                    <input type="number" class="form-control" id="year">
+                </div>
+                <div class="form-group">
+                    <label for="gear_s" class="control-label">Gear:</label>
+                    <input type="radio" name="gear" id="gear_s" value="Automatic" />Automatic<br />
+                    <input type="radio" name="gear" id="gear_s" value="Manual" />Manual
+                </div>
+                <div class="form-group">
+                    <label for="carGroup" class="control-label">Car-Group:</label>
+                    <input type="text" class="form-control" id="carGroup">
+                </div>
+                <div class="form-group">
+                    <label for="image" class="control-label">Image:</label>
+                    <input type="text" class="form-control" id="image">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="editPriceList()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,102 @@
+﻿@model RentCars.BL.RecordResponse<User>
+
+@{
+    ViewBag.Title = "Register";
+}
+<h2>Sign Up</h2>
+<div class="container">
+    <form action="http://localhost:52042/Guest/Register" method="post" class="form-horizontal" role="form">
+        <div class="form-group">
+            <label for="tz" class="col-sm-3 control-label">ID</label>
+            <div class="col-sm-9">
+                <input type="number" name="tz" id="tz" placeholder="ID" class="form-control" autofocus required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="fullName" class="col-sm-3 control-label">Full Name</label>
+            <div class="col-sm-9">
+                <input type="text" name="fullName" id="firstName" placeholder="Full Name" class="form-control" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="username" class="col-sm-3 control-label">Username</label>
+            <div class="col-sm-9">
+                <input type="text" name="username" id="username" placeholder="Username" class="form-control" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="email" class="col-sm-3 control-label">Email</label>
+            <div class="col-sm-9">
+                <input type="email" name="email" id="email" placeholder="Email" class="form-control" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password" class="col-sm-3 control-label">Password</label>
+            <div class="col-sm-9">
+                <input type="password" name="password" id="password" placeholder="Password" required class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="birthDate" class="col-sm-3 control-label">Date of Birth</label>
+            <div class="col-sm-9">
+                <input type="date" name="dob" id="birthDate" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3">Gender</label>
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label class="radio-inline">
+                            <input type="radio" name="genderRadio" required id="femaleRadio" value="Female" checked>Female
+                        </label>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="radio-inline">
+                            <input type="radio" name="genderRadio" id="maleRadio" value="Male">Male
+                        </label>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="radio-inline">
+                            <input type="radio" name="genderRadio" id="uncknownRadio" value="Unknown">Unknown
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- /.form-group -->
+        <div class="form-group">
+            <label class="control-label col-sm-3">Image</label>
+            <div class="col-sm-9">
+                <input type="file" name="image" accept="image/*">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-9 col-sm-offset-3">
+                <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+            </div>
+        </div>
+    </form> <!-- /form -->
+</div> <!-- ./container -->
+
+
+@*<form action="http://localhost:52042/guest/register" method="post">
+    <input type="number" name="tz" placeholder="insert id" required /><br />
+    <input type="text" name="fullname" placeholder="insert name" required /><br />
+    <input type="text" name="username" placeholder="insert username" required /><br />
+    <input type="date" name="dob" /><br />
+    <input type="text" name="sex" placeholder="insert sex" required /><br />
+    <input type="email" name="email" placeholder="insert email" required /><br />
+    <input type="password" name="password" placeholder="insert password" required /><br />
+    <input type="text" name="image" placeholder="insert image" /><br />
+
+    <input type="submit" class="btn btn-primary" value="sign-up" />
+</form>*@
+
+@if (Model != null)
+{
+    <div>@Model.Message</div>
+}
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

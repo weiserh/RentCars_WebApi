@@ -1,0 +1,111 @@
+﻿@model RentCars.BL.RecordResponse<List<CarsInventory>>
+
+@{
+    ViewBag.Title = "CarsInventory";
+}
+
+<h2>Cars Inventory</h2>
+
+<div class="managerMsg">@Model.Message</div>
+<form action="http://localhost:52042/Admin/AddCar">
+    <table class="table table-hover table-bordered table-condensed ">
+        <thead>
+            <tr>
+                <th>Car Number</th>
+                <th>Car price-list</th>
+                <th>Mileage</th>
+                <th>Is Valid</th>
+                <th>Is Available</th>
+                <td></td>
+            </tr>
+        </thead>
+
+            <tr>
+                <td><input type="number"  class="form-control textInput" name="carNumber" placeholder="Car number" required /></td>
+                <td><input type="number"  class="form-control textInput" name="carPriceList" placeholder="Price-list" required /></td>
+                <td><input type="number"  class="form-control textInput" name="mileage" placeholder="Mileage" required /></td>
+                <td style="text-align:left;">
+                        <span style="white-space:nowrap;">
+                            <input type="radio" name="isValid" value="Valid" id="valid_valid" checked />
+                            <label for="valid_valid">Valid</label>
+                        </span><br />
+                        <span style="white-space:nowrap;">
+                            <input type="radio" name="isValid" value="Invalid" id="valid_invalid" />
+                            <label for="valid_invalid">Invalid</label>
+                        </span>
+                </td>
+
+                <td style="text-align:left;">
+                    <span style="white-space:nowrap;">
+                        <input type="radio" name="isAvailable" value="Available" id="available_available" checked />
+                        <label for="available_available">Available</label>
+                    </span><br />
+                    <span style="white-space:nowrap;">
+                        <input type="radio" name="isAvailable" value="Not Available" id="available_not" />
+                        <label for="available_not">Not Available</label>
+                    </span>
+                </td>
+                <td><button type="submit" style="float:left;" class="btn btn-primary btn-edit">Add</button></td>
+
+            </tr>
+            @foreach (var car in Model.t)
+            {
+                <tr>
+                    <td>@car.CarNumber </td>
+                    <td>@car.CarPriceListId</td>
+                    <td>@car.Mileage</td>
+                    <td>@car.IsValid</td>
+                    <td>@car.IsAvailable</td>
+                    <td>
+                        <button  style="float:left;" class="btn btn-primary btn-edit" name="edit" onclick="openEditCarWindow(@car.CarNumber, @car.CarPriceListId, @car.Mileage, '@car.IsValid', '@car.IsAvailable')">Edit</button>
+                        <button  style="float:left;" class="btn btn-danger" name="delete" onclick="deleteCar(@car.CarNumber)">Delete</button>
+                    </td>
+                </tr>
+            }
+</table>
+</form>
+
+
+
+<button id="modalBtn" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="display:none;">
+    Launch demo modal
+</button>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit Car</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="carNumber" class="control-label">Car Number:</label>
+                    <input type="number" class="form-control" id="carNumber" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="carPriceListId" class="control-label">Price-List Id:</label>
+                    <input type="number" class="form-control" id="carPriceListId">
+                </div>
+                <div class="form-group">
+                    <label for="mileage" class="control-label">Mileage:</label>
+                    <input type="number" class="form-control" id="mileage">
+                </div>
+                <div class="form-group">
+                    <label for="isValid" class="control-label">Valid:</label>
+                    <input type="radio" id="isValid" name="isValid" value="Valid">Valid<br>
+                    <input type="radio" id="isValid" name="isValid" value="Invalid">Invalid
+                </div>
+                <div class="form-group">
+                    <label for="isAvailable" class="control-label">Available:</label>
+                    <input type="radio" id="isAvailable" name="isAvailable" value="Available">Available<br>
+                    <input type="radio" id="isAvailable" name="isAvailable" value="Not Available">Not Available
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="editCar()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

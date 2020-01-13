@@ -1,0 +1,32 @@
+﻿@model RentCars.BL.RecordResponse<List<Order>>
+
+@{
+    ViewBag.Title = "MyOrders";
+}
+
+<h2>MyOrders - customer: </h2>
+
+<div>@Model.Message</div>
+<table class="table-hover table-bordered table-condensed">
+    <tr>
+        <td>Order ID</td>
+        <td>Start Date</td>
+        <td>Return Date</td>
+        <td>Actual Return Date</td>
+        <td>Car Number</td>
+        <td>Is Active</td>
+    </tr>
+
+    @foreach (var order in Model.t)
+            {
+        <tr>
+            <td  style="display:none;">@order.TZ</td>
+            <td>@order.Id</td>
+            <td>@order.StartDate.ToString("d")</td>
+            <td>@order.ReturnDate.ToString("d")</td>
+            <td>@order.ActualReturnDate.ToString("d")</td>
+            <td>@order.CarNumber</td>
+            <td>@order.IsActive</td>
+        </tr>
+    }
+</table>

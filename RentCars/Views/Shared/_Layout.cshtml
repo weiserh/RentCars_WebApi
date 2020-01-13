@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+</head>
+<body class="container body-content" style="background-image:url('/Images/site.jpg');background-size:cover;    background-attachment: fixed;">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-header" style="float:none !important;">
+                <a class="navbar-brand" href="/Guest/SearchCarWindow">
+                    Rent from the Best<br><img style="-webkit-filter: invert(1); filter: invert(1)" src="/Images/logo.jpg" height="30" width="100" />
+                    <span>
+                        <span id="app-logo"></span>
+                    </span>
+                </a>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Search Car", "SearchCarWindow", "Guest", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Contact Us", "Contactus", "Guest", new { area = "" }, new { @class = "navbar-brand" })
+
+                <userbar class="userNavbar" id="userNavbar">
+                    @if (Session["UserName"] != null || Session["workerUsername"] != null)
+                        {
+                            if (Session["workerUsername"] != null)
+                            {
+                        <span class="navbar-brand">Welcome @Session["workerUsername"].ToString()</span>
+                        @Html.ActionLink("Return Car", "ReturnCar", "Employee", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("Log Out", "Logout", "Guest", new { area = "" }, new { @class = "navbar-brand" })
+                            }
+                            else
+                            {
+                        <span class="navbar-brand">Welcome @Session["UserName"].ToString()</span>
+                        @Html.ActionLink("Log Out", "Logout", "Guest", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("My Orders", "MyOrders", "User", new { area = "" }, new { @class = "navbar-brand" })
+
+                            }
+                        }
+                        else
+                        {
+                        @Html.ActionLink("Sign Up", "Registration", "Guest", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("Sign In", "Login", "Guest", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("Worker Sign In", "WorkerLogin", "Guest", new { area = "" }, new { @class = "navbar-brand" })
+                        }
+                </userbar>
+                <admin id="adminNavbar">
+                    @if (Session["admin"] != null)
+                        {
+                        @Html.ActionLink("Workers", "Workers", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("Orders", "Orders", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("Cars", "CarsInventory", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("CarPriceLists", "CarPriceLists", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                        }
+                </admin>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav"></ul>
+            </div>
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Rent from the Best</p>
+        </footer>
+    </div>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/app.js"></script>
+</body>
+</html>

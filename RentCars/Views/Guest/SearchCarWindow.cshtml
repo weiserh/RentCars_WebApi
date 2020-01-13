@@ -1,0 +1,161 @@
+﻿
+@{
+    ViewBag.Title = "SearchCarWindow";
+    DateTime dateTime= DateTime.UtcNow.Date;
+}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+    
+    <form action="http://localhost:52042/Guest/SearchCars" id="searhCarForm" class="form-inline">
+        <a class="navbar-brand">Search Car</a><br>
+        <input class="form-control mr-sm-2" type="text" name="year" placeholder="Insert year" />
+        <input class="form-control mr-sm-2" type="text" name="manufacturer" placeholder="Insert manufacturer" />
+        <input class="form-control mr-sm-2" type="text" name="model" placeholder="Insert model" />
+        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="gearS" name="gear">
+            <option value="" selected>Select Gear</option>
+            <option value="Both">Select All</option>
+            <option value="Automatic">Automatic</option>
+            <option value="Manual">Manual</option>
+        </select>
+        <span>
+            <input type="text" class="form-control" name="searchStartDate" id="searchStartDate" onclick="focusDate('@dateTime.ToString("yyyy-MM-dd")')" placeholder="Select Start Date"  />
+            <input type="text" class="form-control" name="returnDate" id="searchReturnDate" onfocus="focusDate()" placeholder="Select return Date" value="@dateTime.ToString("yyyy-MM-dd")" />
+        </span>
+        <input type="text" name="freeText" class="form-control" placeholder="Free text" title="Manufacturer or Model" />
+        <input type="submit" class="btn btn-primary" value="search" />
+    </form>
+</nav>
+
+@if (Model != null)
+{
+    <ul class="list-group">
+        @foreach (var car in Model)
+        {
+            <li class="list-group-item list-serch">
+                <span><@String.Format("img src=/Images/models/{0}.jpg alt={0} class=mediumImg", car.Model)></span>
+                <span style="display:none">@car.CarPriceListId</span>
+                
+                    <div class="manufacturer"> @car.Manufacturer:@car.Model</div>
+                    <div class="year">@car.Year</div>
+                    @if (@car.Gear == true)
+                    {
+                        <span>Automatic gear</span>}
+                    else
+                    {
+                        <span>Manual gear</span>
+                    }
+                    <br><span>Price:@car.Price $</span>
+                
+                <span style="display:none">@car.DelayPrice</span>
+
+                <span>
+                    <input type="button" name="order" value="Order" class="btn btn-info active" onclick="openOrderWindow('@Session["UserName"]',@car.CarPriceListId, @car.Year, '@car.Gear', '@car.Manufacturer', '@car.Model', '@car.Price','@car.DelayPrice','@String.Format("/Images/models/{0}.jpg", car.Model)')" />
+
+
+                </span>
+            </li>
+        }
+    </ul>
+}
+
+<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Order Details</h4>
+            </div>
+            <div class="modal-body">
+                <div id="carPriceListId"></div>
+                <div class="form-group">
+                    <label for="startDate" class="control-label">Start Date:</label>
+                    <input type="date" class="form-control" id="startDate" onchange="calcTotal()" required>
+                </div>
+                <div class="form-group">
+                    <label for="returnDate" class="control-label">Return Date:</label>
+                    <input type="date" class="form-control" id="returnDate" onchange="calcTotal()" required>
+                </div>
+
+                <div class="form-group">
+                    <img style="float:right" id="selectedCarImage" src="#" />
+
+                    <carDetailsText class="textCarDetails" style="float:left">
+                        <label class="control-label">Manufacturer:</label>
+                        <span id="manufacturer" class="control-label"></span><br />
+                        <label class="control-label">Model:</label>
+                        <span id="model" class="control-label"></span><br />
+                        <label class="control-label">Year:</label>
+                        <span id="year" class="control-label"></span><br />
+                        <label class="control-label">Gear:</label>
+                        <span id="gear" class="control-label"></span><br />
+                        <label class="control-label">Price per day:</label> $
+                        <span id="price" class="control-label"></span><br />
+                        <label class="control-label">Delay price per day:</label> $
+                        <span id="delayPrice" class="control-label"></span><br />
+                    </carDetailsText>
+                </div>
+
+                <div class="form-group">
+                    <label>Total Rent cost:</label> $
+                    <span id="calcTotal"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                @if (Session["UserName"] != null)
+                {
+                <button type="button" class="btn btn-primary" id="orderBtn">Order</button>
+                }
+                else
+                {
+                <button type="button" class="btn btn-primary" onclick="openSignInWindow()">Order</button>
+                @*<input type="button" name="order" value="Order" class="btn btn-info active" onclick="openSignInWindow(@car.CarPriceListId, @car.Year, '@car.Gear', '@car.Manufacturer', '@car.Model', '@car.Price','@car.DelayPrice','@String.Format("/Images/models/{0}.jpg", car.Model)')" />*@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<button id="modalBtn" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="display:none;">
+    Launch demo modal
+</button>
+<!-- Modal -->
+<div class="modal fade" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Sign-In to order</h4>
+            </div>
+            <div class="modal-body">
+                <div id="errorMessage" class="alert alert-danger" style="display:none;">
+                    
+                </div>
+                <div class="form-group">
+                    <label for="username" class="control-label">Username:</label>
+                    <input type="text" class="form-control" id="username">
+                </div>
+                <div class="form-group">
+                    <label for="password" class="control-label">Password:</label>
+                    <input type="password" class="form-control" id="password">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="signInBtn">Sign In</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="recentlyViewedWrap" style="display:none;">
+    <h2>Recently Viewed:</h2>
+    <ul></ul>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
